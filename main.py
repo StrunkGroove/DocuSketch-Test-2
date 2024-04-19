@@ -1,5 +1,6 @@
 import datetime
 import subprocess
+import json
 from urllib import request, error
 
 
@@ -30,9 +31,10 @@ class MonitoringMemory:
 
     @classmethod
     def _send_alarm(cls, used_memory: float) -> None:
-        url = f'{cls.api_alarm_path}?used_memory={used_memory}'
+        data = json.dumps({"used_memory": used_memory})
+        req = request.Request(cls.api_alarm_path, data=data, method='POST')
         try:
-            request.urlopen(url)
+            request.urlopen(req, data=data)
         except error.URLError as e:
             cls._log(f'Error send alarm: {str(e)}')
 
