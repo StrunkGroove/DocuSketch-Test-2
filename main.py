@@ -2,7 +2,6 @@ import datetime
 import subprocess
 import json
 from urllib import error
-from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 
