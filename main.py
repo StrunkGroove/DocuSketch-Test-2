@@ -1,13 +1,15 @@
 import datetime
 import subprocess
 import json
-from urllib import request, error
+from urllib import error
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
 
 class MonitoringMemory:
-    critical_used_memory = 70 # %
+    critical_used_memory = 20 # %
     path_log = './MonitoringMemoryScript.log'
-    api_alarm_path = 'http://127.0.0.1:8000/alarm'
+    api_alarm_path = 'http://localhost:8080/api/v1/'
 
     @classmethod
     def main(cls) -> None:
@@ -31,10 +33,11 @@ class MonitoringMemory:
 
     @classmethod
     def _send_alarm(cls, used_memory: float) -> None:
-        data = json.dumps({"used_memory": used_memory})
-        req = request.Request(cls.api_alarm_path, data=data, method='POST')
+        data = {"used_memory": used_memory}
+        headers = {'Content-Type': 'application/json'}
+        req = Request(cls.api_alarm_path, json.dumps(data).encode(), headers=headers)
         try:
-            request.urlopen(req, data=data)
+            urlopen(req)
         except error.URLError as e:
             cls._log(f'Error send alarm: {str(e)}')
 
