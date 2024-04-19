@@ -9,7 +9,7 @@ from urllib.request import Request, urlopen
 class MonitoringMemory:
     critical_used_memory = 20 # %
     path_log = './MonitoringMemoryScript.log'
-    api_alarm_path = 'http://localhost:8080/api/v1/'
+    api_alarm_path = 'http://localhost:8080/api/v1/alarm'
 
     @classmethod
     def main(cls) -> None:
