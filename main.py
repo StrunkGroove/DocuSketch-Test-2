@@ -22,14 +22,15 @@ class MonitoringMemory:
             output = subprocess.check_output(['free', '-m']).decode('utf-8')
         except subprocess.CalledProcessError as e:
             cls._log(f"Error command 'free': {str(e)}")
-
-        lines = output.split('\n')
-        values = lines[1].split()
-
-        total = values[1]
-        used = values[2]
-        return cls._count_memory_used(used, total)
-
+            return 0
+        else:
+            lines = output.split('\n')
+            values = lines[1].split()
+    
+            total = values[1]
+            used = values[2]
+            return cls._count_memory_used(used, total)
+        
     @classmethod
     def _send_alarm(cls, used_memory: float) -> None:
         data = {"used_memory": used_memory}
